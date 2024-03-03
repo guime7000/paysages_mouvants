@@ -5,7 +5,7 @@
 
 Servo organ_servo;  // Organ urn servo object
 
-const byte one_fan = 32; // Urn 1 : One BIG fan
+const byte one_fan = 28; // Urn 1 : One BIG fan
 int urn1_start[5]={10, 13, 18, 30, 45}; // Start time offsets in min since Show is ON.
 int urn1_stop[5]={12, 17, 20, 35, 50}; // Stop time offsets in min since Show is ON.
 byte urn1_index = 0;
@@ -28,9 +28,12 @@ bool pampa_turn_flag=false;
 byte sub_pampa_timestamp_index =0;
 
 const byte hourglass_tall = 6; // Urn 4 : Tall and long hourglass
-const byte hourglass_small = 7; // Urn 4: THe surprising hourglass
+// const byte hourglass_small = 7; // Urn 4: THe surprising hourglass
 
 const byte landscape_light = 8; // Urn 5: Light dimmer ouput for landscape Urn
+const byte landscape_light_2 = 7; //
+byte landscape_light_choice = 0; 
+
 const byte landscape_motor_1 = 9; // Urn 5 : Motor 1
 const byte landscape_motor_2 = 10; // Urn 5 : Motor 2
 const byte landscape_motor_3 = 11; // Urn 5 : Motor 3
@@ -54,7 +57,14 @@ const byte red_led = 22 ;
 const byte green_led = 21 ;
 
 bool show_paused = true;
-unsigned long start_time = millis();
+
+// ######################## MODIFIER LA VALEUR DE OFFSET ###########
+// Pour démarrer au "bloc" 15e minute, mettre la variable block_offset_time à 15
+// Pour démarrer au "bloc" 25e minute, mettre la variable block_offset_time à 25
+
+byte block_offset_time = 10; // Là, c'est comme si on démarrait le programme à la 10e minute directement !
+
+unsigned long start_time = now() + block_offset_time*60;
 
 
 void setup() {
@@ -72,9 +82,10 @@ void setup() {
   analogWriteFrequency(5, 234375); // Teensy 4.1 pin 5 and 6 also changes to 375 kHz
 
   pinMode(hourglass_tall, OUTPUT);
-  pinMode(hourglass_small, OUTPUT);
+  // pinMode(hourglass_small, OUTPUT);
 
   pinMode(landscape_light, OUTPUT);
+  pinMode(landscape_light_2, OUTPUT);
   pinMode(landscape_motor_1, OUTPUT);
   pinMode(landscape_motor_2, OUTPUT);
   pinMode(landscape_motor_3, OUTPUT);
@@ -87,20 +98,36 @@ void setup() {
   for (int i=0; i < landscape_attack_duration*60; i++){
       pwm_command[i] = i;
   }
+
+  pinMode(13, OUTPUT);
+  digitalWrite(13, HIGH);
+  delay(1000);
+  digitalWrite(13, LOW);
+  delay(1000);
+  digitalWrite(13, HIGH);
+  delay(1000);
+  digitalWrite(13, LOW);
+  delay(1000);
+  digitalWrite(13, HIGH);
+  delay(1000);
+  digitalWrite(13, LOW);
+
+  start_time = now() + block_offset_time*60;
+
 }
 
 void loop() {
 
-  while(show_paused){
-    start_time = now();
-    digitalWrite(red_led, HIGH);
-    digitalWrite(green_led, LOW);
-    if(digitalRead(start_switch)){
-      digitalWrite(green_led, HIGH);
-      digitalWrite(red_led, LOW);
-      show_paused = false;
-    }
-  }
+  // while(show_paused){
+  //   start_time = now();
+  //   digitalWrite(red_led, HIGH);
+  //   digitalWrite(green_led, LOW);
+  //   if(digitalRead(start_switch)){
+  //     digitalWrite(green_led, HIGH);
+  //     digitalWrite(red_led, LOW);
+  //     show_paused = false;
+  //   }
+  // }
 
   if (is_valid_index(urn1_index, ARRAY_SIZE(urn1_start))){
     if (is_valid_timestamp(start_time + urn1_start[urn1_index]*60)){
@@ -173,8 +200,24 @@ void loop() {
           landscape_next_ts_set = true;
         }
         if (is_valid_millis_timestamp(landscape_start_timestamp*1000+random(30,1000))){
-          analogWrite(landscape_light, random(50, 255));
-          landscape_next_ts_set = false;
+          landscape_light_choice = random(0,3);
+          switch (landscape_light_choice){
+            case 0:
+              analogWrite(landscape_light, random(50, 255));
+              analogWrite(landscape_light_2, random(50, 255));
+              landscape_next_ts_set = false;
+              break;
+            case 1:
+              analogWrite(landscape_light, random(50, 255));
+              landscape_next_ts_set = false;
+              break;
+            
+            case 2:
+              analogWrite(landscape_light_2, random(50, 255));
+              landscape_next_ts_set = false;
+              break;
+          }
+          
         }
         break;
       case 1:
