@@ -101,17 +101,25 @@ void setup() {
 
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);
+  digitalWrite(landscape_light, HIGH);
   delay(1000);
   digitalWrite(13, LOW);
+  digitalWrite(landscape_light, LOW);
   delay(1000);
   digitalWrite(13, HIGH);
+  digitalWrite(landscape_light_2, HIGH);
   delay(1000);
   digitalWrite(13, LOW);
+  digitalWrite(landscape_light_2, LOW);
   delay(1000);
   digitalWrite(13, HIGH);
+  digitalWrite(landscape_light, HIGH);
+  digitalWrite(landscape_light_2, HIGH);
   delay(1000);
   digitalWrite(13, LOW);
-
+  digitalWrite(landscape_light, LOW);
+  digitalWrite(landscape_light_2, LOW);
+  
   start_time = now() + block_offset_time*60;
 
 }
