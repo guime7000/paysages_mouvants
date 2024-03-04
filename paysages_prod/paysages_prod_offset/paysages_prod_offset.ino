@@ -200,33 +200,48 @@ void loop() {
           landscape_next_ts_set = true;
         }
         if (is_valid_millis_timestamp(landscape_start_timestamp*1000+random(30,1000))){
-          landscape_light_choice = random(0,3);
+          landscape_light_choice = random(0,4);
           switch (landscape_light_choice){
             case 0:
-              analogWrite(landscape_light, random(50, 255));
-              analogWrite(landscape_light_2, random(50, 255));
+              // analogWrite(landscape_light, random(50, 255));
+              // analogWrite(landscape_light_2, random(50, 255));
+              digitalWrite(landscape_light, HIGH);
+              digitalWrite(landscape_light_2, HIGH);
               landscape_next_ts_set = false;
               break;
             case 1:
-              analogWrite(landscape_light, random(50, 255));
+              // analogWrite(landscape_light, random(50, 255));
+              digitalWrite(landscape_light, HIGH);
+              digitalWrite(landscape_light_2, LOW);
               landscape_next_ts_set = false;
               break;
             
             case 2:
-              analogWrite(landscape_light_2, random(50, 255));
+              // analogWrite(landscape_light_2, random(50, 255));
+              digitalWrite(landscape_light, LOW);
+              digitalWrite(landscape_light_2, HIGH);
               landscape_next_ts_set = false;
               break;
+            case 3:
+              digitalWrite(landscape_light, LOW);
+              digitalWrite(landscape_light_2, LOW);
+              landscape_next_ts_set = false;
+            
           }
           
         }
         break;
       case 1:
-        analogWrite(landscape_light, 50);
+        // analogWrite(landscape_light, 50);
+        digitalWrite(landscape_light, HIGH);
+        digitalWrite(landscape_light_2, HIGH);
         break;
       case 2:
         if (pwm_steps_count < 256){
           if (is_valid_timestamp(landscape_start_timestamp + pwm_steps_count * timestamp_step)){
-            analogWrite(landscape_light, pwm_command[pwm_steps_count]);
+            // analogWrite(landscape_light, pwm_command[pwm_steps_count]);
+            digitalWrite(landscape_light, HIGH);
+            digitalWrite(landscape_light_2, HIGH);
             pwm_steps_count +=1;
           }
         }
@@ -234,7 +249,9 @@ void loop() {
     }
 
     if (is_valid_timestamp(start_time + urn5_stop*60)){
-      analogWrite(landscape_light, 0);
+      //analogWrite(landscape_light, 0);
+      digitalWrite(landscape_light, LOW);
+      digitalWrite(landscape_light_2, LOW);
     }
   }
 }
