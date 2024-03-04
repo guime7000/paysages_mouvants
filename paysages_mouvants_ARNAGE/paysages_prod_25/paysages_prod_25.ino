@@ -6,14 +6,14 @@
 Servo organ_servo;  // Organ urn servo object
 
 const byte one_fan = 28; // Urn 1 : One BIG fan
-int urn1_start[5]={10, 13, 18, 30, 45}; // Start time offsets in min since Show is ON.
+int urn1_start[5]={10, 13, 19, 30, 45}; // Start time offsets in min since Show is ON.
 int urn1_stop[5]={12, 17, 20, 35, 50}; // Stop time offsets in min since Show is ON.
-byte urn1_index = 0;
+byte urn1_index = 3;
 
 const byte organ = 1; // Urn 2: the organic organ
-int urn2_start[4]={18, 25, 33, 43}; // Start time offsets in min since Show is ON.
+int urn2_start[4]={20, 25, 33, 43}; // Start time offsets in min since Show is ON.
 int urn2_stop[4]={23, 28, 38, 48}; // Start time offsets in min since Show is ON.
-byte urn2_index = 0;
+byte urn2_index = 1;
 bool organ_turn_flag=false;
 byte rotation_direction=0;
 
@@ -23,7 +23,7 @@ const byte pampa3 = 4; // Urn 3 : The Pampa, fan 3
 const byte pampa4 = 5; // Urn 3 : The Pampa, fan 4
 int urn3_start[4]={15, 25, 35, 45}; // Start time offsets in min since Show is ON.
 int urn3_stop[4]={20, 30, 40, 50}; // Start time offsets in min since Show is ON.
-byte urn3_index = 0;
+byte urn3_index = 1;
 bool pampa_turn_flag=false;
 byte sub_pampa_timestamp_index =0;
 
@@ -34,16 +34,12 @@ const byte landscape_light = 8; // Urn 5: Light dimmer ouput for landscape Urn
 const byte landscape_light_2 = 7; //
 byte landscape_light_choice = 0; 
 
-const byte landscape_motor_1 = 9; // Urn 5 : Motor 1
-const byte landscape_motor_2 = 10; // Urn 5 : Motor 2
-const byte landscape_motor_3 = 11; // Urn 5 : Motor 3
-const byte landscape_motor_4 = 12; // Urn 5 : Motor 1
+
 int urn5_start[3]={30, 35, 40}; // Start time offsets in min since Show is ON.
 int urn5_stop=50; // Start time offsets in min since Show is ON.
 bool landscape_turn_flag=false;
 byte landscape_slice_duration=5; // Duration of one of the landscape slice in minutes.
 unsigned int landscape_start_timestamp=5; // Duration of one of the landscape slice in minutes.
-byte pwm_command[256];
 int landscape_attack_duration = 10; // Duration of final fade in for landscape Urn in minutes. MUST BE GREATER THAN 5 minutes.
 const unsigned int timestamp_step = floor(landscape_attack_duration/256);
 int pwm_steps_count=0;
@@ -58,13 +54,9 @@ const byte green_led = 21 ;
 
 bool show_paused = true;
 
-// ######################## MODIFIER LA VALEUR DE OFFSET ###########
-// Pour démarrer au "bloc" 15e minute, mettre la variable block_offset_time à 15
-// Pour démarrer au "bloc" 25e minute, mettre la variable block_offset_time à 25
+float block_offset_time = 24.95;
 
-byte block_offset_time = 10; // Là, c'est comme si on démarrait le programme à la 10e minute directement !
-
-unsigned long start_time = now() + block_offset_time*60;
+unsigned long start_time = now() + round(block_offset_time*60);
 
 
 void setup() {
@@ -86,31 +78,27 @@ void setup() {
 
   pinMode(landscape_light, OUTPUT);
   pinMode(landscape_light_2, OUTPUT);
-  pinMode(landscape_motor_1, OUTPUT);
-  pinMode(landscape_motor_2, OUTPUT);
-  pinMode(landscape_motor_3, OUTPUT);
-  pinMode(landscape_motor_4, OUTPUT);
-
-  pinMode(start_switch, INPUT);
-  pinMode(red_led, OUTPUT);
-  pinMode(green_led, OUTPUT);
-
-  for (int i=0; i < landscape_attack_duration*60; i++){
-      pwm_command[i] = i;
-  }
-
+  
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);
+  digitalWrite(landscape_light, HIGH);
   delay(1000);
   digitalWrite(13, LOW);
+  digitalWrite(landscape_light, LOW);
   delay(1000);
   digitalWrite(13, HIGH);
+  digitalWrite(landscape_light_2, HIGH);
   delay(1000);
   digitalWrite(13, LOW);
+  digitalWrite(landscape_light_2, LOW);
   delay(1000);
   digitalWrite(13, HIGH);
+  digitalWrite(landscape_light, HIGH);
+  digitalWrite(landscape_light_2, HIGH);
   delay(1000);
   digitalWrite(13, LOW);
+  digitalWrite(landscape_light, LOW);
+  digitalWrite(landscape_light_2, LOW);
 
   start_time = now() + block_offset_time*60;
 
@@ -193,6 +181,7 @@ void loop() {
       urn5_index +=1;
     }
 
+
     switch (urn5_index) {
       case 0:
         if (landscape_next_ts_set ==false){
@@ -200,41 +189,52 @@ void loop() {
           landscape_next_ts_set = true;
         }
         if (is_valid_millis_timestamp(landscape_start_timestamp*1000+random(30,1000))){
-          landscape_light_choice = random(0,3);
+          landscape_light_choice = random(0,4);
           switch (landscape_light_choice){
             case 0:
-              analogWrite(landscape_light, random(50, 255));
-              analogWrite(landscape_light_2, random(50, 255));
+              // analogWrite(landscape_light, random(50, 255));
+              // analogWrite(landscape_light_2, random(50, 255));
+              digitalWrite(landscape_light, HIGH);
+              digitalWrite(landscape_light_2, HIGH);
               landscape_next_ts_set = false;
               break;
             case 1:
-              analogWrite(landscape_light, random(50, 255));
+              // analogWrite(landscape_light, random(50, 255));
+              digitalWrite(landscape_light, HIGH);
+              digitalWrite(landscape_light_2, LOW);
               landscape_next_ts_set = false;
               break;
             
             case 2:
-              analogWrite(landscape_light_2, random(50, 255));
+              // analogWrite(landscape_light_2, random(50, 255));
+              digitalWrite(landscape_light, LOW);
+              digitalWrite(landscape_light_2, HIGH);
               landscape_next_ts_set = false;
               break;
+            case 3:
+              digitalWrite(landscape_light, LOW);
+              digitalWrite(landscape_light_2, LOW);
+              landscape_next_ts_set = false;
+            
           }
           
         }
         break;
       case 1:
-        analogWrite(landscape_light, 50);
+        // analogWrite(landscape_light, 50);
+        digitalWrite(landscape_light, HIGH);
+        digitalWrite(landscape_light_2, HIGH);
         break;
       case 2:
-        if (pwm_steps_count < 256){
-          if (is_valid_timestamp(landscape_start_timestamp + pwm_steps_count * timestamp_step)){
-            analogWrite(landscape_light, pwm_command[pwm_steps_count]);
-            pwm_steps_count +=1;
-          }
-        }
+        digitalWrite(landscape_light, HIGH);
+        digitalWrite(landscape_light_2, HIGH);
         break;
     }
 
     if (is_valid_timestamp(start_time + urn5_stop*60)){
-      analogWrite(landscape_light, 0);
+      //analogWrite(landscape_light, 0);
+      digitalWrite(landscape_light, LOW);
+      digitalWrite(landscape_light_2, LOW);
     }
   }
 }
