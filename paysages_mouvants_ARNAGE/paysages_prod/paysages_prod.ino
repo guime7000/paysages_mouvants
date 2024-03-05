@@ -48,6 +48,7 @@ const unsigned int timestamp_step = floor(landscape_attack_duration/256);
 int pwm_steps_count=0;
 bool landscape_next_ts_set = false;
 unsigned int landscape_next_timestamp;
+bool go_on_lights=false;
 
 byte urn5_index = 0;
 
@@ -178,66 +179,68 @@ void loop() {
 
     if (is_valid_timestamp(start_time + urn5_start[urn5_index]*60)){
       landscape_next_timestamp = now()*1000;
+      go_on_lights = true;
     }
 
-    if (now()-int(landscape_next_timestamp/1000) >= landscape_slice_duration*60){
+    if (now()-round(landscape_next_timestamp/1000) >= landscape_slice_duration*60){
       urn5_index +=1;
     }
 
-
-    switch (urn5_index) {
-      case 0:
-        if (landscape_next_ts_set ==false){
-          landscape_next_timestamp += random(30,1000);
-          landscape_next_ts_set = true;
-        }
-        if (is_valid_millis_timestamp(landscape_start_timestamp*1000+random(30,1000))){
-          landscape_light_choice = random(0,4);
-          switch (landscape_light_choice){
-            case 0:
-              // analogWrite(landscape_light, random(50, 255));
-              // analogWrite(landscape_light_2, random(50, 255));
-              digitalWrite(landscape_light, HIGH);
-              digitalWrite(landscape_light_2, HIGH);
-              landscape_next_ts_set = false;
-              break;
-            case 1:
-              // analogWrite(landscape_light, random(50, 255));
-              digitalWrite(landscape_light, HIGH);
-              digitalWrite(landscape_light_2, LOW);
-              landscape_next_ts_set = false;
-              break;
-            
-            case 2:
-              // analogWrite(landscape_light_2, random(50, 255));
-              digitalWrite(landscape_light, LOW);
-              digitalWrite(landscape_light_2, HIGH);
-              landscape_next_ts_set = false;
-              break;
-            case 3:
-              digitalWrite(landscape_light, LOW);
-              digitalWrite(landscape_light_2, LOW);
-              landscape_next_ts_set = false;
+    if(go_on_lights){
+      switch (urn5_index) {
+        case 0:
+          if (landscape_next_ts_set ==false){
+            landscape_next_timestamp += random(30,1000);
+            landscape_next_ts_set = true;
+          }
+          if (is_valid_millis_timestamp(landscape_start_timestamp*1000+random(30,1000))){
+            landscape_light_choice = random(0,4);
+            switch (landscape_light_choice){
+              case 0:
+                // analogWrite(landscape_light, random(50, 255));
+                // analogWrite(landscape_light_2, random(50, 255));
+                digitalWrite(landscape_light, HIGH);
+                digitalWrite(landscape_light_2, HIGH);
+                landscape_next_ts_set = false;
+                break;
+              case 1:
+                // analogWrite(landscape_light, random(50, 255));
+                digitalWrite(landscape_light, HIGH);
+                digitalWrite(landscape_light_2, LOW);
+                landscape_next_ts_set = false;
+                break;
+              
+              case 2:
+                // analogWrite(landscape_light_2, random(50, 255));
+                digitalWrite(landscape_light, LOW);
+                digitalWrite(landscape_light_2, HIGH);
+                landscape_next_ts_set = false;
+                break;
+              case 3:
+                digitalWrite(landscape_light, LOW);
+                digitalWrite(landscape_light_2, LOW);
+                landscape_next_ts_set = false;
+              
+            }
             
           }
-          
-        }
-        break;
-      case 1:
-        // analogWrite(landscape_light, 50);
-        digitalWrite(landscape_light, HIGH);
-        digitalWrite(landscape_light_2, HIGH);
-        break;
-      case 2:
-        digitalWrite(landscape_light, HIGH);
-        digitalWrite(landscape_light_2, HIGH);
-        break;
-    }
+          break;
+        case 1:
+          // analogWrite(landscape_light, 50);
+          digitalWrite(landscape_light, HIGH);
+          digitalWrite(landscape_light_2, HIGH);
+          break;
+        case 2:
+          digitalWrite(landscape_light, HIGH);
+          digitalWrite(landscape_light_2, HIGH);
+          break;
+      }
 
-    if (is_valid_timestamp(start_time + urn5_stop*60)){
-      //analogWrite(landscape_light, 0);
-      digitalWrite(landscape_light, LOW);
-      digitalWrite(landscape_light_2, LOW);
+      if (is_valid_timestamp(start_time + urn5_stop*60)){
+        //analogWrite(landscape_light, 0);
+        digitalWrite(landscape_light, LOW);
+        digitalWrite(landscape_light_2, LOW);
+      }
     }
   }
 }
