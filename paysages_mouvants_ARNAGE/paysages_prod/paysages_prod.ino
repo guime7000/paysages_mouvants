@@ -6,8 +6,8 @@
 Servo organ_servo;  // Organ urn servo object
 
 const byte one_fan = 28; // Urn 1 : One BIG fan
-int urn1_start[5]={10, 13, 18, 30, 45}; // Start time offsets in min since Show is ON.
-int urn1_stop[5]={12, 17, 20, 35, 50}; // Stop time offsets in min since Show is ON.
+int urn1_start[5]={10, 13, 17, 30, 45}; // Start time offsets in min since Show is ON.
+int urn1_stop[5]={12, 15, 18, 35, 50}; // Stop time offsets in min since Show is ON.
 byte urn1_index = 0;
 
 const byte organ = 1; // Urn 2: the organic organ
