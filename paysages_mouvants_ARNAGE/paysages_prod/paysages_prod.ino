@@ -134,10 +134,10 @@ void loop() {
     
     if (organ_turn_flag){
       if (rotation_direction== 0){
-        organ_servo.write(85);
+        organ_servo.write(80);
       }
       if (rotation_direction== 1){
-        organ_servo.write(95);
+        organ_servo.write(100);
       }
     }
     if (organ_turn_flag == false){
