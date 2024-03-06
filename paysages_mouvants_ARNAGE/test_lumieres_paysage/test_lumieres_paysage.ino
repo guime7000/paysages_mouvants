@@ -38,11 +38,11 @@ const byte landscape_motor_1 = 9; // Urn 5 : Motor 1
 const byte landscape_motor_2 = 10; // Urn 5 : Motor 2
 const byte landscape_motor_3 = 11; // Urn 5 : Motor 3
 const byte landscape_motor_4 = 12; // Urn 5 : Motor 1
-int urn5_start[3]={1, 35, 40}; // Start time offsets in min since Show is ON.
-int urn5_stop=50; // Start time offsets in min since Show is ON.
+int urn5_start[3]={1, 3, 5}; // Start time offsets in min since Show is ON.
+int urn5_stop=6; // Start time offsets in min since Show is ON.
 bool landscape_turn_flag=false;
 byte landscape_slice_duration=1; // Duration of one of the landscape slice in minutes.
-unsigned int landscape_start_timestamp=1; // Duration of one of the landscape slice in minutes.
+unsigned int landscape_start_timestamp=0; // Duration of one of the landscape slice in minutes.
 int landscape_attack_duration = 1; // Duration of final fade in for landscape Urn in minutes. MUST BE GREATER THAN 5 minutes.
 const unsigned int timestamp_step = floor(landscape_attack_duration/256);
 int pwm_steps_count=0;
@@ -109,17 +109,6 @@ void setup() {
 }
 
 void loop() {
-
-  // while(show_paused){
-  //   start_time = now();
-  //   digitalWrite(red_led, HIGH);
-  //   digitalWrite(green_led, LOW);
-  //   if(digitalRead(start_switch)){
-  //     digitalWrite(green_led, HIGH);
-  //     digitalWrite(red_led, LOW);
-  //     show_paused = false;
-  //   }
-  // }
 
   if (is_valid_index(urn5_index, ARRAY_SIZE(urn5_start))){
 

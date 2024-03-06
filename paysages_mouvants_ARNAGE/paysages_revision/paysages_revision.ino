@@ -8,14 +8,14 @@ Servo hourglass_servo;
 
 //Urn1 Big Fan
 const byte one_fan = 28; // Urn 1 : One BIG fan
-int urn1_start[5]={2, 15, 30, 0, 0}; // Start time offsets in min since Show is ON.
-int urn1_stop[5]={3, 20, 35, 0, 0}; // Stop time offsets in min since Show is ON.
+int urn1_start[5]={10, 13, 17, 30, 45}; // Start time offsets in min since Show is ON.
+int urn1_stop[5]={12, 15, 18, 35, 50}; // Stop time offsets in min since Show is ON.
 byte urn1_index = 0;
 
 //Urn2 Organ
 const byte organ = 1; // Urn 2: the organic organ
-int urn2_start[4]={3, 10, 18, 28}; // Start time offsets in min since Show is ON.
-int urn2_stop[4]={8, 13, 23, 33}; // Start time offsets in min since Show is ON.
+int urn2_start[4]={18, 25, 33, 43}; // Start time offsets in min since Show is ON.
+int urn2_stop[4]={23, 28, 38, 48}; // Start time offsets in min since Show is ON.
 byte urn2_index = 0;
 bool organ_turn_flag=false;
 byte rotation_direction=0;
@@ -25,8 +25,8 @@ const byte pampa1 = 2; // Urn 3 : The Pampa, fan 1
 const byte pampa2 = 3; // Urn 3 : The Pampa, fan 2
 const byte pampa3 = 4; // Urn 3 : The Pampa, fan 3
 const byte pampa4 = 5; // Urn 3 : The Pampa, fan 4
-int urn3_start[4]={0, 10, 17, 25}; // Start time offsets in min since Show is ON.
-int urn3_stop[4]={5, 15, 18, 35}; // Start time offsets in min since Show is ON.
+int urn3_start[4]={15, 25, 32, 40}; // Start time offsets in min since Show is ON.
+int urn3_stop[4]={20, 30, 33, 50}; // Start time offsets in min since Show is ON.
 byte urn3_index = 0;
 bool pampa_turn_flag=false;
 byte sub_pampa_timestamp_index=0;
@@ -50,8 +50,8 @@ const byte landscape_motor_1 = 9; // Urn 5 : Motor 1
 const byte landscape_motor_2 = 10; // Urn 5 : Motor 2
 const byte landscape_motor_3 = 11; // Urn 5 : Motor 3
 const byte landscape_motor_4 = 12; // Urn 5 : Motor 1
-int urn5_start[3]={15, 20, 25}; // Start time offsets in min since Show is ON.
-float urn5_stop[3]={24.95, 29.95, 30}; // Start time offsets in min since Show is ON.
+int urn5_start[3]={30, 35, 40}; // Start time offsets in min since Show is ON.
+float urn5_stop[3]={34.95, 39.95, 50}; // Start time offsets in min since Show is ON.
 
 byte landscape_light_choice = 0;
 bool landscape_turn_flag=false;
