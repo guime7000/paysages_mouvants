@@ -119,7 +119,7 @@ void loop() {
 
   // Hourglass / Sablier
   actual_hourglass_time = millis();
-  hourglass_servo.write(80);
+  hourglass_servo.write(10);
   if (actual_hourglass_time - previous_hourglass_time > hourglass_rotation_duration){
     hourglass_servo.write(90);
     previous_hourglass_time = millis();

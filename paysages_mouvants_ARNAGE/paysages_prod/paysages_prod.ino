@@ -35,7 +35,7 @@ byte sub_pampa_timestamp_index=0;
 const byte hourglass_tall = 6; // Urn 4 : Tall and long hourglass
 // const byte hourglass_small = 7; // Urn 4: THe surprising hourglass
 
-unsigned long hourglass_pause_duration=5000; // Durée de rotation du moteur du sablier (en ms)
+unsigned long hourglass_pause_duration=5000; // Durée de pause de rotation du moteur du sablier (en ms)
 
 unsigned long hourglass_rotation_duration=200; // Durée de rotation du moteur du sablier (en ms)
 
@@ -120,6 +120,8 @@ void setup() {
 
 void loop() {
 
+pampas_fans_on();
+
 //Urn 1 BIG Fan
   if (is_valid_index(urn1_index, ARRAY_SIZE(urn1_start))){
     if (is_valid_timestamp(start_time + urn1_start[urn1_index]*time_factor)){
@@ -188,7 +190,12 @@ if (is_valid_index(urn3_index, ARRAY_SIZE(urn3_start))){
   }
 
   if (hourglass_rotates){
+<<<<<<< Updated upstream
     hourglass_servo.write(80);
+=======
+    hourglass_servo.write(10);
+    analogWrite(hourglass_tall, 255);
+>>>>>>> Stashed changes
     if (actual_hourglass_time - previous_hourglass_time > hourglass_rotation_duration){
       hourglass_rotates = false;
       previous_hourglass_time = millis();

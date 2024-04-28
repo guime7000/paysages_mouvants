@@ -12,9 +12,9 @@ void loop()
 {
     // LE sablier monte sans s'arreter....
   // Pour le stopper, débrancher le câble relié au moteur du sablier
-    monServo.write(80);
-    delay(100);
+    monServo.write(0);
+    delay(80);
     monServo.write(90);
-    delay(100);
+    delay(3000);
 
 }

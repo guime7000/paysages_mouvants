@@ -1,6 +1,6 @@
 // TODO: rajouter la surprise
 // TODO: gestion lumières
-// TODO: 
+// TODO: Gestion codes par blocs de temps
 
 #include <Servo.h>
 #include <TimeLib.h>
@@ -8,7 +8,8 @@
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
 Servo organ_servo;  // Organ urn servo object
-Servo hourglass_servo;
+Servo hourglass_servo; // Hourglass servo object
+Servo surprise_servo; // Surprise servo object in Hourglass urn
 
 // Push buttons config
 const byte start_push_button = 23; // Sortie pour bouton poussoir Rouge (top départ)
@@ -27,9 +28,14 @@ int urn1_stop[5]={12, 15, 18, 35, 50}; // Stop time offsets in min since Show is
 byte urn1_index = 0;
 
 //Urn2 Organ
-const byte organ = 1; // Urn 2: the organic organ
-int urn2_start[4]={18, 25, 33, 43}; // Start time offsets in min since Show is ON.
-int urn2_stop[4]={23, 28, 38, 48}; // Start time offsets in min since Show is ON.
+const byte organ = 1; // Urn 2: the organic organ*
+// ======== ARNAGE settings for Organ =======================
+// int urn2_start[4]={18, 25, 33, 43}; // Start time offsets in min since Show is ON.
+// int urn2_stop[4]={23, 28, 38, 48}; // Start time offsets in min since Show is ON.
+// ==========================================================
+
+int urn2_start[2]={22, 35}; // Start time offsets in min since Show is ON.
+int urn2_stop[2]={28, 38}; // Start time offsets in min since Show is ON.
 byte urn2_index = 0;
 bool organ_turn_flag=false;
 byte rotation_direction=0;
@@ -49,12 +55,14 @@ byte sub_pampa_timestamp_index=0;
 const byte hourglass_tall = 6; // Urn 4 : Tall and long hourglass
 const byte hourglass_surprise = 7; // Urn 4: THe surprising hourglass
 
-unsigned long hourglass_pause_duration=5000; // Durée de pause de rotation du moteur du sablier (en ms)
-unsigned long hourglass_rotation_duration=200; // Durée de rotation du moteur du sablier (en ms)
+int urn4_start=10; // Start time offsets in min since Show is ON.
+unsigned long hourglass_pause_duration=250; // Durée de pause de rotation du moteur du sablier (en ms)
+unsigned long hourglass_rotation_duration=5000; // Durée de rotation du moteur du sablier (en ms)
 byte hourglass_rise_speed = 60; // Réglage de la vitesse de montée du sablier : 0 = très rapide, 90 = arrêté
 
-bool hourglass_rotates=false; // Durée de rotation du moteur du sablier (en ms)
-unsigned long actual_hourglass_time;
+bool hourglass_rotates=false;
+bool hourglass_is_launched = 0;
+unsigned long actual_hourglass_time=0;
 unsigned long previous_hourglass_time=0;
 
 //Urn 5 Landscape
@@ -65,8 +73,6 @@ const byte landscape_light_4 = 11;
 
 int urn5_start[3]={30, 35, 40}; // Start time offsets in min since Show is ON.
 float urn5_stop[3]={34.95, 39.95, 50}; // Start time offsets in min since Show is ON.
-
-
 
 byte landscape_light_choice = 0;
 bool landscape_turn_flag=false;
@@ -85,7 +91,6 @@ unsigned long previous_landscape_time=0;
 
 byte urn5_index = 0;
 
-
 byte time_factor=60; // 1 for working in seconds, 60 for working in minutes
 byte block_offset_time = 0;
 unsigned long start_time = now() + block_offset_time*60;
@@ -97,7 +102,6 @@ void setup() {
   pinMode(start_push_button, INPUT_PULLUP);
   pinMode(hourglass_push_button, INPUT_PULLUP);
   pinMode(surprise_push_button, INPUT_PULLUP);
-
 
 //Urn 1 BIG FAN
   pinMode(one_fan, OUTPUT);
@@ -118,23 +122,26 @@ void setup() {
 //Urn 4 Hourglass
   pinMode(hourglass_tall, OUTPUT);
   hourglass_servo.attach(hourglass_tall);
-  hourglass_servo.attach(hourglass_surprise);
+  surprise_servo.attach(hourglass_surprise);
 
 //Urn 5 Landscape
   pinMode(landscape_light, OUTPUT);
   pinMode(landscape_light_2, OUTPUT);
+
+  blink_internal_led();
 
   start_time = now() + block_offset_time*60;
 }
 
 void loop() {
 
-pampas_fans_on();
-
+// ========= Waiting for start Push button to be used ==============
 // start_push_button_state = digitalRead(start_push_button);
 //   while (!start_push_button_state){
 //     hourglass_servo.write(140);
 //     }
+// ==================================================================
+
 
 // Pour dérouler le sablier qd nécessaire 
 //Rester appuyer sur le bouton pour dérouler. Relâcher le bouton pour arrêter le moteur.
@@ -213,10 +220,16 @@ if (is_valid_index(urn3_index, ARRAY_SIZE(urn3_start))){
   }
 
 // Urn 4 Hourglass
+
+  if (is_valid_timestamp(start_time + urn4_start*time_factor)){
+    hourglass_rotates = true;
+    hourglass_is_launched = 1;
+    }
+
   actual_hourglass_time = millis();
   hourglass_servo.write(90);
 
-  if (actual_hourglass_time - previous_hourglass_time > hourglass_pause_duration){
+  if (actual_hourglass_time - previous_hourglass_time > hourglass_pause_duration && !hourglass_rotates && hourglass_is_launched){
     hourglass_rotates = true;
     previous_hourglass_time = millis();
   }
@@ -352,5 +365,20 @@ void landscape_aleas(byte random_value){
       landscape_next_ts_set = false;
       break;
   }
+}
+
+void blink_internal_led(){
+  digitalWrite(13,HIGH);
+  delay(1000);
+  digitalWrite(13,LOW);
+  delay(1000);
+  digitalWrite(13,HIGH);
+  delay(1000);
+  digitalWrite(13,LOW);
+  delay(1000);
+  digitalWrite(13,HIGH);
+  delay(1000);
+  digitalWrite(13,LOW);
+  delay(1000);
 }
 
