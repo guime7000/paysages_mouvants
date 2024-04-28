@@ -102,6 +102,19 @@ void setup() {
   pinMode(landscape_light, OUTPUT);
   pinMode(landscape_light_2, OUTPUT);
 
+  digitalWrite(13,HIGH);
+  delay(1000);
+  digitalWrite(13,LOW);
+  delay(1000);
+  digitalWrite(13,HIGH);
+  delay(1000);
+  digitalWrite(13,LOW);
+  delay(1000);
+  digitalWrite(13,HIGH);
+  delay(1000);
+  digitalWrite(13,LOW);
+  delay(1000);
+
   start_time = now() + block_offset_time*60;
 }
 
@@ -128,13 +141,10 @@ if (is_valid_index(urn2_index, ARRAY_SIZE(urn2_start))){
       }
       if (rotation_direction== 1){
         organ_servo.write(80);
-        analogWrite(1, 255);
-
       }
     }
     if (organ_turn_flag == false){
       organ_servo.write(90);
-      analogWrite(1, 0);
     }
 
     if (is_valid_timestamp(start_time + urn2_start[urn2_index]*time_factor)){
@@ -172,7 +182,6 @@ if (is_valid_index(urn3_index, ARRAY_SIZE(urn3_start))){
 // Urn 4 Hourglass
   actual_hourglass_time = millis();
   hourglass_servo.write(90);
-  analogWrite(hourglass_tall, 0);
 
   if (actual_hourglass_time - previous_hourglass_time > hourglass_pause_duration){
     hourglass_rotates = true;
@@ -181,7 +190,6 @@ if (is_valid_index(urn3_index, ARRAY_SIZE(urn3_start))){
 
   if (hourglass_rotates){
     hourglass_servo.write(80);
-    analogWrite(hourglass_tall, 255);
     if (actual_hourglass_time - previous_hourglass_time > hourglass_rotation_duration){
       hourglass_rotates = false;
       previous_hourglass_time = millis();
@@ -203,8 +211,6 @@ if (is_valid_index(urn5_index, ARRAY_SIZE(urn5_start))){
       lights_on = false;
       digitalWrite(landscape_light, LOW);
       digitalWrite(landscape_light_2, LOW);
-
-      digitalWrite(13, LOW);
     }
 
     if(lights_on){
@@ -216,13 +222,9 @@ if (is_valid_index(urn5_index, ARRAY_SIZE(urn5_start))){
             landscape_next_timestamp = random(30,100);
             landscape_next_ts_set = true;
             randomized_light = random(0,4);
-      digitalWrite(13, LOW);
-
           }
             digitalWrite(landscape_light, HIGH);
             digitalWrite(landscape_light_2, HIGH);
-      digitalWrite(13, HIGH);
-
             landscape_next_ts_set = false;
             previous_landscape_time = millis();
       
