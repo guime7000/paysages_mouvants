@@ -323,10 +323,10 @@ bool is_valid_millis_timestamp(unsigned long timestamp){
 }
 
 void pampas_fans_on(void){
-  analogWrite(pampa1, random(255, 256));
-  analogWrite(pampa2, random(255, 256));
-  analogWrite(pampa3, random(255, 256));
-  analogWrite(pampa4, random(255, 256));
+  analogWrite(pampa1, 255);
+  analogWrite(pampa2, 255));
+  analogWrite(pampa3, 255);
+  analogWrite(pampa4, 255);
 }
 
 void pampas_fans_off(void){
