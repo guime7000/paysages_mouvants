@@ -1,7 +1,6 @@
 // TODO: rajouter la surprise
 // TODO: gestion lumières
 // TODO: Gestion codes par blocs de temps
-
 #include <Servo.h>
 #include <TimeLib.h>
 
@@ -143,19 +142,19 @@ void loop() {
 // ==================================================================
 
 
-// Pour dérouler le sablier qd nécessaire 
-//Rester appuyer sur le bouton pour dérouler. Relâcher le bouton pour arrêter le moteur.
-hourglass_push_button_state = digitalRead(hourglass_push_button);
-  while (!hourglass_push_button_state){
-    hourglass_servo.write(140);
-    }
+// // Pour dérouler le sablier qd nécessaire 
+// //Rester appuyer sur le bouton pour dérouler. Relâcher le bouton pour arrêter le moteur.
+// hourglass_push_button_state = digitalRead(hourglass_push_button);
+//   while (!hourglass_push_button_state){
+//     hourglass_servo.write(140);
+//     }
 
-// Pour dérouler la surprise qd nécessaire
-//Rester appuyer sur le bouton pour dérouler. Relâcher le bouton pour arrêter le moteur.
-surprise_push_button_state = digitalRead(surprise_push_button);
-  while (!surprise_push_button_state){
-    hourglass_servo.write(140);
-    }
+// // Pour dérouler la surprise qd nécessaire
+// //Rester appuyer sur le bouton pour dérouler. Relâcher le bouton pour arrêter le moteur.
+// surprise_push_button_state = digitalRead(surprise_push_button);
+//   while (!surprise_push_button_state){
+//     hourglass_servo.write(140);
+//     }
 
 //Urn 1 BIG Fan
   if (is_valid_index(urn1_index, ARRAY_SIZE(urn1_start))){
@@ -174,17 +173,14 @@ if (is_valid_index(urn2_index, ARRAY_SIZE(urn2_start))){
     if (organ_turn_flag){
       if (rotation_direction== 0){
         organ_servo.write(80);
-        analogWrite(1, 255);
       }
       if (rotation_direction== 1){
         organ_servo.write(80);
-        analogWrite(1, 255);
 
       }
     }
     if (organ_turn_flag == false){
       organ_servo.write(90);
-      analogWrite(1, 0);
     }
 
     if (is_valid_timestamp(start_time + urn2_start[urn2_index]*time_factor)){
@@ -309,7 +305,7 @@ bool is_valid_index(byte index, int size_of_array){
 
 
 bool is_valid_timestamp(unsigned long timestamp){
-  if ((timestamp - 1 <= now()) && (now() <= timestamp + 1)){
+  if ((timestamp - 1 <= now()+ block_offset_time*60) && (now()+ block_offset_time*60 <= timestamp + 1)){
     return true;
   }
   return false;
@@ -324,7 +320,7 @@ bool is_valid_millis_timestamp(unsigned long timestamp){
 
 void pampas_fans_on(void){
   analogWrite(pampa1, 255);
-  analogWrite(pampa2, 255));
+  analogWrite(pampa2, 255);
   analogWrite(pampa3, 255);
   analogWrite(pampa4, 255);
 }
