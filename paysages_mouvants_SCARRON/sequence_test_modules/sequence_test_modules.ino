@@ -77,11 +77,11 @@ digitalWrite(one_fan, LOW);
 
 //=====================================
 // Test Urne 2, coeur
-organ_servo.write(50);
+organ_servo.write(70);
 delay(500);
 organ_servo.write(90);
 delay(1000);
-organ_servo.write(140);
+organ_servo.write(110);
 delay(500);
 organ_servo.write(90);
 
@@ -121,6 +121,7 @@ for(int j=0; j<3; j++){
   for (int i=0; i<4; i++){
     analogWrite(leds[i],128);
     delay(500);
+    analogWrite(leds[i],0);
   }
 } 
 
