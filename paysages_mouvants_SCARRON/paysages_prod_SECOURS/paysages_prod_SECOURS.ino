@@ -187,12 +187,7 @@ if (is_valid_index(urn3_index, ARRAY_SIZE(urn3_start))){
   }
 
   if (hourglass_rotates){
-<<<<<<< Updated upstream
     hourglass_servo.write(80);
-=======
-    hourglass_servo.write(10);
-    analogWrite(hourglass_tall, 255);
->>>>>>> Stashed changes
     if (actual_hourglass_time - previous_hourglass_time > hourglass_rotation_duration){
       hourglass_rotates = false;
       previous_hourglass_time = millis();
