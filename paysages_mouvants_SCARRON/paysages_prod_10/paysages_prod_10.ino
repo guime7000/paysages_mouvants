@@ -54,7 +54,10 @@ byte sub_pampa_timestamp_index=0;
 const byte hourglass_tall = 6; // Urn 4 : Tall and long hourglass
 const byte hourglass_surprise = 7; // Urn 4: THe surprising hourglass
 
-int urn4_start=0; // Start time offsets in min since Show is ON.
+int urn4_start[2]={0, 10}; // Start time offsets in min since Show is ON.
+int urn4_stop[2]={5, 50}; // Stop time offsets in min since Show is ON.
+byte urn4_index = 0;
+
 unsigned long hourglass_pause_duration=250; // Durée de pause de rotation du moteur du sablier (en ms)
 unsigned long hourglass_rotation_duration=5000; // Durée de rotation du moteur du sablier (en ms)
 byte hourglass_rise_speed = 60; // Réglage de la vitesse de montée du sablier : 0 = très rapide, 90 = arrêté
@@ -217,9 +220,16 @@ if (is_valid_index(urn3_index, ARRAY_SIZE(urn3_start))){
 
 // Urn 4 Hourglass
 
-  if (is_valid_timestamp(start_time + urn4_start*time_factor)){
+if (is_valid_index(urn4_index, ARRAY_SIZE(urn4_start))){
+  
+  if (is_valid_timestamp(start_time + urn4_start[urn4_index]*time_factor)){
     hourglass_rotates = true;
     hourglass_is_launched = 1;
+    }
+
+  if (is_valid_timestamp(start_time + urn4_stop[urn4_index]*time_factor)){
+    hourglass_rotates = false;
+    urn4_index += 1;
     }
 
   actual_hourglass_time = millis();
@@ -237,6 +247,7 @@ if (is_valid_index(urn3_index, ARRAY_SIZE(urn3_start))){
       previous_hourglass_time = millis();
     }
   }
+}
 
 //Urn 5
 
