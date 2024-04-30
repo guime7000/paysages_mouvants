@@ -55,8 +55,8 @@ const byte hourglass_tall = 6; // Urn 4 : Tall and long hourglass
 const byte hourglass_surprise = 7; // Urn 4: THe surprising hourglass
 
 int urn4_start=10; // Start time offsets in min since Show is ON.
-unsigned long hourglass_pause_duration=250; // Durée de pause de rotation du moteur du sablier (en ms)
-unsigned long hourglass_rotation_duration=5000; // Durée de rotation du moteur du sablier (en ms)
+unsigned long hourglass_pause_duration=8000; // Durée de pause de rotation du moteur du sablier (en ms)
+unsigned long hourglass_rotation_duration=250; // Durée de rotation du moteur du sablier (en ms)
 byte hourglass_rise_speed = 60; // Réglage de la vitesse de montée du sablier : 0 = très rapide, 90 = arrêté
 
 bool hourglass_rotates=false;
