@@ -112,6 +112,9 @@ void loop() {
     }
 
     if (is_valid_timestamp(start_time + urn5_stop[urn5_index]*time_factor)){
+      for (int i=0; i<4; i++){
+        analogWrite(landscape_pin_array[i], 0);
+      }
       landscape_light_on = 0;
       urn5_index +=1;
     }
