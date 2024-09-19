@@ -19,7 +19,8 @@ bool surprise_push_button_state = 0;
 
 //Urn1 Big Fan
 const byte one_fan = 0; // Urn 1 : One BIG fan
-int urn1_start[5]={0, 3, 7, 20, 35}; // Start time offsets in min since Show is ON.
+// int urn1_start[5]={0, 3, 7, 20, 35}; // Start time offsets in min since Show is ON.
+int urn1_start[5]={1, 3, 7, 20, 35}; // Start time offsets in min since Show is ON.
 int urn1_stop[5]={2, 5, 8, 25, 40}; // Stop time offsets in min since Show is ON.
 byte urn1_index = 0;
 
@@ -47,7 +48,7 @@ const byte hourglass_tall = 6; // Urn 4 : Tall and long hourglass
 const byte hourglass_surprise = 7; // Urn 4: The surprising hourglass
 
 int urn4_start[2]={0, 10}; // Start time offsets in min since Show is ON.
-int urn4_stop[2]={5, 35}; // Stop time offsets in min since Show is ON.
+int urn4_stop[2]={5, 33}; // Stop time offsets in min since Show is ON.
 byte urn4_index = 0;
 
 unsigned long hourglass_pause_duration=8000; // Durée de pause de rotation du moteur du sablier (en ms)
@@ -63,7 +64,9 @@ unsigned long previous_hourglass_time=0;
 //Urn 5 Landscape
 const int landscape_light[4] = {8, 11, 9, 10}; // Urn 5: Light dimmer ouput for landscape Urn 
 
-const int low_landscape_light[2] = {11, 10}; // Urn 5: Low ligths ramp up outputs
+// const int low_landscape_light[2] = {11, 10}; // Urn 5: Low ligths ramp up outputs
+const int low_landscape_light[2] = {8, 11}; // Urn 5: Low ligths ramp up outputs
+const int low_landscape_light_rightoff[2] = {10, 11}; // Urn 5: Low ligths ramp up outputs
 int urn5_start[7]={20, 25, 30, 34, 35, 36, 50}; // Start time offsets in min since Show is ON.
 
 bool landscape_blink = true;
@@ -243,6 +246,14 @@ if (is_valid_index(urn4_index, ARRAY_SIZE(urn4_start))){
   }
 }
 
+if ((start_time+34*time_factor<= now()) && (now() < start_time+35*time_factor)){
+  hourglass_servo.write(78); 
+}
+if (start_time+2*time_factor<= now()){
+  hourglass_servo.write(90); 
+}
+
+
 // Urn 4 Montée de la SURPRISE
 
 if ((start_time+35*time_factor<= now()) && (now() < start_time+36*time_factor)){
@@ -255,7 +266,13 @@ else{
 
 //Urn 5
 landscape_now = millis();
-int urn5_start[7]={20, 25, 30, 34, 35, 36, 40}; // Start time offsets in min since Show is ON.
+// int urn5_start[7]={-1, -1, 1, 2, 3, 4, 5}; // Start time offsets in min since Show is ON.
+// fond droite :8 [0]
+// dev droite: 9 [2]
+
+// fond gauche: 11 [1]
+//devant_gauche: 10 [3]
+// int urn5_start[7]={20, 25, 30, 34, 35, 36, 40}; // Start time offsets in min since Show is ON.
 
 if ((start_time+urn5_start[0]*time_factor<= now()) && (now() < start_time+urn5_start[1]*time_factor)) {// Fete Foraine
   if (landscape_now - elapsed >= landscape_delay ){ 
@@ -267,10 +284,10 @@ if ((start_time+urn5_start[0]*time_factor<= now()) && (now() < start_time+urn5_s
 
 if ((start_time+urn5_start[1]*time_factor<= now()) && (now() < start_time+urn5_start[2]*time_factor)) {// Faible mouvement (2 lampes)
   if (landscape_now - elapsed >= landscape_delay ){ 
-    analogWrite(landscape_light[1], 0);
+    analogWrite(landscape_light[2], 0);
     analogWrite(landscape_light[3], 0);
     analogWrite(low_landscape_light[random(0,2)],random(32,64));
-    landscape_delay=random(100,300);
+    landscape_delay=random(200,500);
     elapsed = millis();
   }
 }
@@ -285,9 +302,10 @@ if ((start_time+urn5_start[2]*time_factor<= now()) && (now() < start_time+urn5_s
 
 if ((start_time+urn5_start[3]*time_factor<= now()) && (now() < start_time+urn5_start[4]*time_factor)) {// Virer lum droite 1 min puis UNE sec de blackout
   if (landscape_now - elapsed >= landscape_delay ){ 
-    analogWrite(landscape_light[1], 0);
-    analogWrite(landscape_light[3], 0);
-    analogWrite(low_landscape_light[random(0,2)],random(64,128));
+    // analogWrite(landscape_light[1], 0);
+    analogWrite(landscape_light[0], 0);
+    analogWrite(landscape_light[2], 0);
+    analogWrite(low_landscape_light_rightoff[random(0,2)],random(64,128));
     landscape_delay=random(100,300);
     elapsed = millis();
   }
