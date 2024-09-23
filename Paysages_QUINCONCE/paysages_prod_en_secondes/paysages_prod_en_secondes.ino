@@ -21,7 +21,7 @@ bool surprise_push_button_state = 0;
 const byte one_fan = 0; // Urn 1 : One BIG fan
 // int urn1_start[5]={0, 3, 7, 20, 35}; // Start time offsets in min since Show is ON.
 //Urne 1: top/stop en minute : (0,2), (3,5), (7,8), (20,25), (35,40)
-int urn1_start[5]={60, 180, 420, 1200, 2100}; // Start time offsets in min since Show is ON.
+int urn1_start[5]={1, 180, 420, 1200, 2100}; // Start time offsets in min since Show is ON.
 int urn1_stop[5]={120, 300, 480, 1500, 2400}; // Stop time offsets in min since Show is ON.
 byte urn1_index = 0;
 
