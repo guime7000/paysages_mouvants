@@ -250,10 +250,10 @@ if (is_valid_index(urn4_index, ARRAY_SIZE(urn4_start))){
   }
 }
 
-if ((start_time+34*time_factor<= now()) && (now() < start_time+35*time_factor)){
+if ((start_time+2040<= now()) && (now() < start_time+2090)){
   hourglass_servo.write(78); 
 }
-if (start_time+35*time_factor<= now()){
+if (start_time+2090<= now()){
   hourglass_servo.write(90); 
 }
 
