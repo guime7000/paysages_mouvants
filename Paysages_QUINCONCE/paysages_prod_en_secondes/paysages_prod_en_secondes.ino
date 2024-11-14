@@ -21,15 +21,16 @@ bool surprise_push_button_state = 0;
 const byte one_fan = 0; // Urn 1 : One BIG fan
 // int urn1_start[5]={0, 3, 7, 20, 35}; // Start time offsets in min since Show is ON.
 //Urne 1: top/stop en minute : (0,2), (3,5), (7,8), (20,25), (35,40)
-int urn1_start[5]={1, 180, 420, 1200, 2100}; // Start time offsets in min since Show is ON.
-int urn1_stop[5]={120, 300, 480, 1500, 2400}; // Stop time offsets in min since Show is ON.
+int urn1_start[4]={1, 180, 420, 1320}; // Start time offsets in min since Show is ON.
+int urn1_stop[4]={120, 300, 480, 1500}; // Stop time offsets in min since Show is ON.
 byte urn1_index = 0;
+
 
 //Urn2 Organ
 const byte organ = 1; // Urn 2: the organic organ*
 //Urne 2: top/stop en minute : (12,18), (25,28), (35,40)
-int urn2_start[3]={720, 1500, 2100}; // Start time offsets in min since Show is ON.
-int urn2_stop[3]={1080, 1680, 2400}; // Start time offsets in min since Show is OFF.
+int urn2_start[3]={780, 1500, 2100}; // Start time offsets in min since Show is ON.
+int urn2_stop[3]={1320, 1680, 2400}; // Start time offsets in min since Show is OFF.
 byte urn2_index = 0;
 bool organ_turn_flag=false;
 byte rotation_direction=0;
@@ -41,8 +42,9 @@ const byte pampa3 = 4; // Urn 3 : The Pampa, fan 3
 const byte pampa4 = 5; // Urn 3 : The Pampa, fan 4
 //Urne 3: top/stop en minute : (5,10), (15,20), (25,30), (35,40)
 int urn3_start[4]={300, 900, 1500, 2100}; // Start time offsets in min since Show is ON.
-int urn3_stop[4]={600, 1200, 1800, 2400}; // Start time offsets in min since Show is ON.
+int urn3_stop[4]={600, 1080, 1800, 2400}; // Start time offsets in min since Show is ON.
 byte urn3_index = 0;
+
 bool pampa_turn_flag=false;
 byte sub_pampa_timestamp_index=0;
 
@@ -71,7 +73,7 @@ const int landscape_light[4] = {8, 11, 9, 10}; // Urn 5: Light dimmer ouput for 
 const int low_landscape_light[2] = {8, 11}; // Urn 5: Low ligths ramp up outputs
 const int low_landscape_light_rightoff[2] = {10, 11}; // Urn 5: Low ligths ramp up outputs
 //Urne 5: top en minute : (20,25,30,34,35,36,50)
-int urn5_start[7]={1200, 1500, 1800, 2040, 2100, 2160, 3000}; // Start time offsets in min since Show is ON.
+int urn5_start[7]={1320, 1500, 1800, 2040, 2100, 2160, 3000}; // Start time offsets in min since Show is ON.
 
 bool landscape_blink = true;
 
@@ -86,15 +88,13 @@ unsigned long landscape_chenillard_delay =0;
 unsigned long index_chenillard = 0;
 byte sequence_chenillard=0;
 
-
-
 //*************************************************************************************
 
 byte urn5_index = 0;
 
 byte time_factor=60; // 1 for working in seconds, 60 for working in minutes
 byte block_offset_time = 0;
-unsigned long start_time = now() + block_offset_time*60;
+unsigned long start_time = now() + block_offset_time;
 
 void setup() {
   pinMode(13, OUTPUT);
@@ -132,7 +132,7 @@ for (int jj=0; jj<sizeof(landscape_light)/sizeof(int);jj++){
     delay(10);
   }
 
-  start_time = now();
+  start_time = now() + block_offset_time;
 }
 
 void loop() {
