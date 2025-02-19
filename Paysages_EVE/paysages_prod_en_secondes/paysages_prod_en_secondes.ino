@@ -64,7 +64,7 @@ const int landscape_light[4] = {8, 11, 9, 10}; // Urn 5: Light dimmer ouput for 
 const int low_landscape_light[2] = {8, 11}; // Urn 5: Low ligths ramp up outputs
 const int low_landscape_light_rightoff[2] = {10, 11}; // Urn 5: Low ligths ramp up outputs
 //Urne 5: top en minute : (20,25,30,34,35,36,50)
-int urn5_start[7]={1320, 1500, 1800, 2040, 2100, 2160, 3000}; // Start time offsets in min since Show is ON.
+int urn5_start[6]={1320, 1500, 1800, 2040, 2160, 3000}; // Start time offsets in min since Show is ON.
 
 bool landscape_blink = true;
 
@@ -234,13 +234,6 @@ else{
 
 //Urn 5
 landscape_now = millis();
-// int urn5_start[7]={-1, -1, 1, 2, 3, 4, 5}; // Start time offsets in min since Show is ON.
-// fond droite :8 [0]
-// dev droite: 9 [2]
-
-// fond gauche: 11 [1]
-//devant_gauche: 10 [3]
-// int urn5_start[7]={20, 25, 30, 34, 35, 36, 40}; // Start time offsets in min since Show is ON.
 
 if ((start_time+urn5_start[0]<= now()) && (now() < start_time+urn5_start[1])) {// Fete Foraine
   if (landscape_now - elapsed >= landscape_delay ){ 
@@ -270,7 +263,6 @@ if ((start_time+urn5_start[2]<= now()) && (now() < start_time+urn5_start[3])) {/
 
 if ((start_time+urn5_start[3]<= now()) && (now() < start_time+urn5_start[4])) {// Virer lum droite 1 min puis UNE sec de blackout
   if (landscape_now - elapsed >= landscape_delay ){ 
-    // analogWrite(landscape_light[1], 0);
     analogWrite(landscape_light[0], 0);
     analogWrite(landscape_light[2], 0);
     analogWrite(low_landscape_light_rightoff[random(0,2)],random(64,128));
@@ -285,25 +277,7 @@ if ((start_time+urn5_start[4] <= now()) && (now() < start_time+urn5_start[4]+1))
   }
 }
 
-if ((start_time+urn5_start[4]+1 <= now()) && (now() < start_time+urn5_start[5])) {// ON / OFF / ON / OFF (4 * 15s)
-  if (landscape_now - elapsed >= landscape_delay ){ 
-    if (landscape_blink){
-      for (int jj=0; jj<sizeof(landscape_light)/sizeof(int);jj++){
-      analogWrite(landscape_light[jj],128);
-      }
-    elapsed = millis();
-    }
-    else {
-      for (int jj=0; jj<sizeof(landscape_light)/sizeof(int);jj++){
-      analogWrite(landscape_light[jj],0);
-      }
-    elapsed = millis();
-    }
-  landscape_delay = random(8000,15000);
-  landscape_blink = !landscape_blink;
-  }
-}
-if ((start_time+urn5_start[5] <= now()) && (now() < start_time+urn5_start[6])) {// CHENILLARD
+if ((start_time+urn5_start[4]+1 <= now()) && (now() < start_time+urn5_start[5])) {// CHENILLARD
     if (landscape_now - elapsed >= landscape_chenillard_delay ){
     sequence_chenillard = index_chenillard % 6;
     if (sequence_chenillard == 0){
