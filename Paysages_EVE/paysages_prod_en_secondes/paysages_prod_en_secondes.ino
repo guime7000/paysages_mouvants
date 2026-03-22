@@ -21,8 +21,8 @@ byte urn1_index = 0;
 // Urn2 Organ
 const byte organ = 1; // Urn 2: the organic organ*
 // Urne 2: top/stop en minute : (12,18), (25,28), (35,40)
-int urn2_start[3] = {780, 1500 + offset_organ, 2100 + offset_organ}; // Start time offsets in min since Show is ON.
-int urn2_stop[3] = {1320, 1680 + offset_organ, 2400 + offset_organ}; // Start time offsets in min since Show is OFF.
+int urn2_start[3] = {780, 1500 + offset_organ, 2100 + offset_organ};                // Start time offsets in min since Show is ON.
+int urn2_stop[3] = {1320 + offset_organ, 1680 + offset_organ, 2400 + offset_organ}; // Start time offsets in min since Show is OFF.
 byte urn2_index = 0;
 bool organ_turn_flag = false;
 byte rotation_direction = 0;
